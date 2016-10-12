@@ -36,6 +36,7 @@ app.get(['/facebook', '/instagram'], function(req, res) {
 app.post('/facebook', function(req, res) {
   console.log('Facebook request body:');
 
+  /*
   if (req.isXHub) {
     console.log('request header X-Hub-Signature found, validating');
     if (req.isXHubValid()) {
@@ -48,7 +49,7 @@ app.post('/facebook', function(req, res) {
     res.send('Failed to verify!\n');
     // recommend sending 401 status in production for non-validated signatures
     // res.sendStatus(401);
-  }
+  } */
   console.log(req.body);
 
   // Process the Facebook updates here
