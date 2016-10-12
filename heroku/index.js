@@ -6,6 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+var Logger = require('le_node');
+var log = new Logger({
+  token:'65d98b51-f56a-4536-aaeb-f440860ba875'
+});
+
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
@@ -18,7 +23,7 @@ app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET }));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-  console.log(req);
+  log.debug(req);
   res.send('It works!');
 });
 
@@ -34,22 +39,22 @@ app.get(['/facebook', '/instagram'], function(req, res) {
 });
 
 app.post('/facebook', function(req, res) {
-  console.log('Facebook request body:');
+  log.debug('Facebook request body:');
 
   if (req.isXHub) {
-    console.log('request header X-Hub-Signature found, validating');
+    log.debug('request header X-Hub-Signature found, validating');
     if (req.isXHubValid()) {
-      console.log('request header X-Hub-Signature validated');
+      log.debug('request header X-Hub-Signature validated');
       res.send('Verified!\n');
     }
   }
   else {
-    console.log('Warning - request header X-Hub-Signature not present or invalid');
+    log.error('Warning - request header X-Hub-Signature not present or invalid');
     res.send('Failed to verify!\n');
     // recommend sending 401 status in production for non-validated signatures
     // res.sendStatus(401);
   }
-  console.log(req.body);
+  log.debug(req.body);
 
   // Process the Facebook updates here
   res.sendStatus(200);
