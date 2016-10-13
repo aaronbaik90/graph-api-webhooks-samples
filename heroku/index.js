@@ -38,7 +38,7 @@ app.get(['/facebook', '/instagram'], function(req, res) {
   }
 });
 
-app.post('/facebook', function(wss, req, res) {
+app.post('/facebook', function(websocket, req, res) {
   console.log('Facebook request body:');
   console.log(req.body);
   var entry = req.body.entry;
@@ -46,7 +46,7 @@ app.post('/facebook', function(wss, req, res) {
     var changes = entry[i].changes;
     for (j = 0; j < changes.length; j++) {
       console.log(changes[j]);
-      wss.send(JSON.stringify({update_feed: "message received!"}));
+      websocket.send(JSON.stringify({update_feed: "message received!"}));
     }
   }
   // Process the Facebook updates here
