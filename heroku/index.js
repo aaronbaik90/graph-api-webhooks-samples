@@ -11,8 +11,8 @@ var express = require('express');
 var app = express();
 var xhub = require('express-x-hub');
 var socketIO = require('socket.io');
-
 app.set('port', (process.env.PORT || 5000));
+app.use(function(req, res) { res.sendFile('/index.html'); });
 app.listen(app.get('port'));
 
 var server = require('http').Server(app);
@@ -25,10 +25,6 @@ io.on('connection', function (socket) {
 
 app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET }));
 app.use(bodyParser.json());
-
-app.get('/', function(req, res) {
-  res.sendfile('index.html', {root: __dirname});
-});
 
 app.get(['/facebook', '/instagram'], function(req, res) {
   if (
