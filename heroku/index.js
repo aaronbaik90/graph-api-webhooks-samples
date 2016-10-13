@@ -63,7 +63,7 @@ app.post('/facebook', function(req, res) {
     var changes = entry[i].changes;
     for (j = 0; j < changes.length; j++) {
       console.log(changes[j]);
-      //io.emit('update_feed', 'Received Message');
+      io.emit('update_feed', {message: 'Received Message'} );
     }
   }
   
