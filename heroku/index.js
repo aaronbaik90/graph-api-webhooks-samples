@@ -49,7 +49,9 @@ app.post('/facebook', function(websocket, req, res) {
     var changes = entry[i].changes;
     for (j = 0; j < changes.length; j++) {
       console.log(changes[j]);
-      websocket.send(JSON.stringify({update_feed: "message received!"}));
+      websocket.send(JSON.stringify({
+        id: "client1"
+      }));
     }
   }
   // Process the Facebook updates here
