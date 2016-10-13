@@ -51,7 +51,13 @@ app.post('/facebook', function(req, res) {
     // res.sendStatus(401);
   } */
   
-  console.log(req);
+  var entry = req.body.entry;
+  for (i = 0 ; i < entry.length; i++) {
+    var changes = entry[i].changes;
+    for (j = 0; j < changes.length; j++) {
+      console.log(changes[j]);
+    }
+  }
   
 
   // Process the Facebook updates here
