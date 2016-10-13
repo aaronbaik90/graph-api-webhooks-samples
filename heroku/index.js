@@ -40,6 +40,7 @@ app.get(['/facebook', '/instagram'], function(req, res) {
 
 app.post('/facebook', function(websocket, req, res) {
   console.log('Facebook request body:');
+  console.log(req);
   console.log(req.body);
   var entry = req.body.entry;
   for (i = 0 ; i < entry.length; i++) {
