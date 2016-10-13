@@ -169,7 +169,7 @@ th {
     nowObj = new Date(Date.now());
     returnString = '';
     if (dateObj.toDateString() != nowObj.toDateString()) {
-      returnString += formatNumber(dateObj.getMonth());
+      returnString += formatNumber(dateObj.getMonth()+1);
       returnString += '-'
       returnString += formatNumber(dateObj.getDate());
       returnString += '-'
