@@ -15,8 +15,9 @@ var socketIO = require('socket.io');
 app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'));
 
+var server = require('http').Server(app);
 // setup socket io for communication
-const io = socketIO(app.createServer());
+const io = socketIO(server);
 io.on('connection', function (socket) {
   console.log('Client connected');
   socket.on('disconnect', function() { console.log('Client disconnected'); });
