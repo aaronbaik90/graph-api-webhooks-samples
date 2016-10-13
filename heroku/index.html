@@ -301,6 +301,7 @@ th {
 var socket = io();
 var spotToWrite = document.getElementById('livePage');
 socket.on('update_feed', function(response) {
+	console.log(response);
 	spotToWrite.innerHTML = response;
 });
 </script>
