@@ -18,8 +18,7 @@ app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET }));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-  console.log(req);
-  res.sendfile('index.php', {root: __dirname });
+  res.sendfile('index.html', {root: __dirname});
 });
 
 app.get(['/facebook', '/instagram'], function(req, res) {
