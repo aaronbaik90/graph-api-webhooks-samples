@@ -6,7 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
