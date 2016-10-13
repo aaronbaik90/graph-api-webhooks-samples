@@ -10,17 +10,17 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
 var xhub = require('express-x-hub');
-//var socketIO = require('socket.io');
+var socketIO = require('socket.io');
 
 app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'));
 
 // setup socket io for communication
-/*const io = socketIO(app);
+const io = socketIO(app);
 io.on('connection', function (socket) {
   console.log('Client connected');
-  socket.on('disconnect', () => console.log('Client disconnected'));
-}); */
+  socket.on('disconnect', function() { console.log('Client disconnected'); });
+}); 
 
 app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET }));
 app.use(bodyParser.json());
