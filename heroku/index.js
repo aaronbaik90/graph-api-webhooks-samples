@@ -19,29 +19,26 @@ var http = require("http");
 var server = http.createServer(app);
 server.listen(port);
 var wss = new WebSocketServer({server: server});
-var socket = null;
 
-wss.on("connection", function(socketCreated, ws) {
+wss.on("connection", function(application, ws) {
   console.log("Web Socket Connected");
-  socketCreated = ws;
+  application.get(['/facebook', '/instagram'], function(req, res) {
+    if (
+      req.param('hub.mode') == 'subscribe' &&
+      req.param('hub.verify_token') == 'token'
+    ) {
+      res.send(req.param('hub.challenge'));
+    } else {
+      res.sendStatus(400);
+    }
+  });  
   ws.on("close", function() {
     console.log("Web Socket Closed");
   });
-}.bind(this, socket));
+}.bind(this, app));
 
 
 app.get('/', function(req, res) { res.sendFile('index.html', { root: __dirname} ); });
-
-app.get(['/facebook', '/instagram'], function(req, res) {
-  if (
-    req.param('hub.mode') == 'subscribe' &&
-    req.param('hub.verify_token') == 'token'
-  ) {
-    res.send(req.param('hub.challenge'));
-  } else {
-    res.sendStatus(400);
-  }
-});
 
 app.post('/facebook', function(websocket, req, res) {
   console.log('Facebook request body:');
