@@ -40,7 +40,7 @@ app.get(['/facebook', '/instagram'], function(req, res) {
   }
 });
 
-app.post('/facebook', function(req, res) {
+app.post('/facebook', function(io, req, res) {
   console.log('Facebook request body:');
 
   /*
@@ -70,7 +70,7 @@ app.post('/facebook', function(req, res) {
 
   // Process the Facebook updates here
   res.sendStatus(200);
-});
+}.bind(io));
 
 app.post('/instagram', function(req, res) {
   console.log('Instagram request body:');
