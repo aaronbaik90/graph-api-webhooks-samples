@@ -19,13 +19,15 @@ var http = require("http");
 var server = http.createServer(app);
 server.listen(port);
 var wss = new WebSocketServer({server: server});
+var socket = null;
 
-wss.on("connection", function(ws) {
+wss.on("connection", function(socketCreated, ws) {
   console.log("Web Socket Connected");
+  socketCreated = ws;
   ws.on("close", function() {
     console.log("Web Socket Closed");
   });
-});
+}.bind(this, socket));
 
 
 app.get('/', function(req, res) { res.sendFile('index.html', { root: __dirname} ); });
@@ -49,6 +51,7 @@ app.post('/facebook', function(websocket, req, res) {
     var changes = entry[i].changes;
     for (j = 0; j < changes.length; j++) {
       console.log(changes[j]);
+      
       websocket.send(JSON.stringify({
         id: "client1"
       }));
@@ -56,7 +59,7 @@ app.post('/facebook', function(websocket, req, res) {
   }
   // Process the Facebook updates here
   res.sendStatus(200);
-}.bind(this, wss));
+}.bind(this, ws));
 
 app.post('/instagram', function(req, res) {
   console.log('Instagram request body:');
