@@ -16,8 +16,7 @@ app.listen(app.get('port'));
 // websocket setup
 var WebSocketServer = require("ws").Server;
 var http = require("http");
-var server = http.createServer(app);
-server.listen(port);
+var server = http.Server(app);
 var wss = new WebSocketServer({server: server});
 
 wss.on("connection", function(ws) {
