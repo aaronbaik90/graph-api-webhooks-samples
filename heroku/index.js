@@ -24,8 +24,8 @@ wss.on("connection", function(ws) {
   console.log("Web Socket Connected");
   ws.on("close", function() {
     console.log("Web Socket Closed");
-  }
-});
+  });
+};
 
 
 app.get('/', function(req, res) { res.sendFile('index.html', { root: __dirname} ); });
