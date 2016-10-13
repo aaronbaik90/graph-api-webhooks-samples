@@ -26,7 +26,7 @@ io.on('connection', function (socket) {
 app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET }));
 app.use(bodyParser.json());
 
-app.get('/app', function(req, res) {
+app.get('/', function(req, res) {
   res.sendfile('index.html', {root: __dirname});
 });
 
