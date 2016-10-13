@@ -30,6 +30,10 @@ app.get('/', function(req, res) {
   res.sendfile('index.html', {root: __dirname});
 });
 
+app.get('/socket.io/socket.io.js', function(req, res) {
+  res.sendfile('/socket.io/socket.io.js', {root: __dirname});
+});
+
 app.get(['/facebook', '/instagram'], function(req, res) {
   if (
     req.param('hub.mode') == 'subscribe' &&
