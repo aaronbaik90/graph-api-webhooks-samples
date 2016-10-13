@@ -9,8 +9,8 @@ var bodyParser = require('body-parser');
 var xhub = require('express-x-hub');
 var express = require('express');
 var app = express();
-var port =  (process.env.PORT || 5000);
 app.use('/', express.static(__dirname + '/'));
+var port =  (process.env.PORT || 5000);
 app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET }));
 app.use(bodyParser.json());
 // websocket setup
@@ -43,7 +43,6 @@ app.get(['/facebook', '/instagram'], function(req, res) {
 
 app.post('/facebook', function(websocket, req, res) {
   console.log('Facebook request body:');
-  console.log(req);
   console.log(req.body);
   var entry = req.body.entry;
   for (i = 0 ; i < entry.length; i++) {
@@ -55,7 +54,7 @@ app.post('/facebook', function(websocket, req, res) {
   }
   // Process the Facebook updates here
   res.sendStatus(200);
-}.bind(wss));
+}.bind(this, wss));
 
 app.post('/instagram', function(req, res) {
   console.log('Instagram request body:');
