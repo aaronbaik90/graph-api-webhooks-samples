@@ -337,8 +337,12 @@ th {
 var host = location.origin.replace(/^http/, 'ws');
 var ws = new WebSocket(host);
 ws.onmessage = function(event) {
-  document.getElementById('livePage').innerHTML = JSON.parse(event.data);
-  console.log(event);
+  var jsonData = JSON.parse(event.data);
+  var displayString = '';
+  if (jsonData['verb'] == 'add') {
+    displayString += jsonData['sender_name'] + " has a new post : " + jsonData["message"] + '.';
+    document.getElementById('livePage').innerHTML = displayString;
+  }
 };
 </script>
 </div>
