@@ -22,25 +22,7 @@ var wss = new WebSocketServer({server: server});
 
 wss.on("connection", function(application, ws) {
   console.log("Web Socket Connected");
-  application.get(['/facebook', '/instagram'], function(req, res) {
-    if (
-      req.param('hub.mode') == 'subscribe' &&
-      req.param('hub.verify_token') == 'token'
-    ) {
-      res.send(req.param('hub.challenge'));
-    } else {
-      res.sendStatus(400);
-    }
-  });  
-  ws.on("close", function() {
-    console.log("Web Socket Closed");
-  });
-}.bind(this, app));
-
-
-app.get('/', function(req, res) { res.sendFile('index.html', { root: __dirname} ); });
-
-app.post('/facebook', function(websocket, req, res) {
+application.post('/facebook', function(req, res) {
   console.log('Facebook request body:');
   console.log(req.body);
   var entry = req.body.entry;
@@ -56,7 +38,24 @@ app.post('/facebook', function(websocket, req, res) {
   }
   // Process the Facebook updates here
   res.sendStatus(200);
-}.bind(this, socket));
+});  
+  ws.on("close", function() {
+    console.log("Web Socket Closed");
+  });
+}.bind(this, app));
+
+app.get(['/facebook', '/instagram'], function(req, res) {
+    if (
+      req.param('hub.mode') == 'subscribe' &&
+      req.param('hub.verify_token') == 'token'
+    ) {
+      res.send(req.param('hub.challenge'));
+    } else {
+      res.sendStatus(400);
+    }
+  });  
+
+app.get('/', function(req, res) { res.sendFile('index.html', { root: __dirname} ); });
 
 app.post('/instagram', function(req, res) {
   console.log('Instagram request body:');
