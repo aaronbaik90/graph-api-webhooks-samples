@@ -59,7 +59,7 @@ app.post('/facebook', function(websocket, req, res) {
   }
   // Process the Facebook updates here
   res.sendStatus(200);
-}.bind(this, ws));
+}.bind(this, socket));
 
 app.post('/instagram', function(req, res) {
   console.log('Instagram request body:');
