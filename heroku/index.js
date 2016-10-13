@@ -16,7 +16,7 @@ app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'));
 
 // setup socket io for communication
-const io = socketIO(app);
+const io = socketIO(app.createServer());
 io.on('connection', function (socket) {
   console.log('Client connected');
   socket.on('disconnect', function() { console.log('Client disconnected'); });
