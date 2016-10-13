@@ -40,7 +40,7 @@ app.get(['/facebook', '/instagram'], function(req, res) {
   }
 });
 
-app.post('/facebook', function(io, req, res) {
+app.post('/facebook', function(wss, req, res) {
   console.log('Facebook request body:');
   console.log(req.body);
   var entry = req.body.entry;
@@ -51,11 +51,9 @@ app.post('/facebook', function(io, req, res) {
       wss.send(JSON.stringify({update_feed: "message received!"}));
     }
   }
-  
-
   // Process the Facebook updates here
   res.sendStatus(200);
-}.bind(this, io));
+}.bind(this, wss));
 
 app.post('/instagram', function(req, res) {
   console.log('Instagram request body:');
