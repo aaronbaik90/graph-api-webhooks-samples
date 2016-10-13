@@ -340,6 +340,7 @@ ws.onmessage = function(event) {
   var jsonData = JSON.parse(event.data);
   var displayString = '';
   console.log(jsonData);
+  var valueObj = jsonData['value'];
   if (jsonData['verb'] == 'add') {
     displayString += jsonData['sender_name'] + " has a new post : " + jsonData["message"] + '.';
     document.getElementById('livePage').innerHTML = displayString;
