@@ -5,11 +5,14 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
+var bodyParser = require('body-parser');
+var xhub = require('express-x-hub');
 var express = require('express');
 var app = express();
 var port =  (process.env.PORT || 5000);
 app.use('/', express.static(__dirname + '/'));
-
+app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET }));
+app.use(bodyParser.json());
 // websocket setup
 var WebSocketServer = require("ws").Server;
 var http = require("http");
