@@ -5,8 +5,6 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-'use strict';
-
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
@@ -77,7 +75,5 @@ app.post('/instagram', function(req, res) {
   // Process the Instagram updates here
   res.sendStatus(200);
 });
-
-app.use( function(req, res) { res.sendFile('index.html', { root: __dirname} ); });
 
 app.listen();
