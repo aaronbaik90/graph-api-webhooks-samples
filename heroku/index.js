@@ -5,19 +5,16 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
+var port =  (process.env.PORT || 5000));
 app.use('/', express.static(__dirname + '/'));
-var xhub = require('express-x-hub');
-app.set('port', (process.env.PORT || 5000));
-app.listen(app.get('port'));
 
 // websocket setup
 var WebSocketServer = require("ws").Server;
 var http = require("http");
 var server = http.createServer(app);
-server.listen(app.get('port'));
+server.listen(port);
 var wss = new WebSocketServer({server: server});
 
 wss.on("connection", function(ws) {
