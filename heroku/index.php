@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Facebook Login JavaScript Example</title>
+<meta charset="UTF-8">
+<style>
+
+.wrap {
+    width: 100%;
+}
+
+.floatleft {
+    float:left;
+    width:30%;
+}
+
+.floatright {
+    float:right;
+    width:68%;
+}
+
+p {
+    font-family: "Tahoma";
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+    background-color: #3B5998;
+    color: white;
+}
+</style>
+</head>
+<body>
+<script>
+  // define PageInfo class
+  function PageInfo(accessToken, pageId, pageName) {
+    this.accessToken = accessToken;
+    this.pageId = pageId;
+    this.pageName = pageName;
+  };
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      testAPI();
+      getPages();
+      requestRealtime('5044580459ad2b44438d428da250f7df');
+      getPermissions(response.authResponse.userID);
+    } else if (response.status === 'not_authorized') {
+      // The person is logged into Facebook, but not your app.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    } else {
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '1778594792353144',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.8' // use graph api version 2.5
+  });
+
+  // Now that we've initialized the JavaScript SDK, we call 
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  var pages = [];
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Welcome, ' + response.name + '!';
+    });
+  }
+
+  function requestRealtime(appSecret) {
+    FB.api('/1778594792353144/subscriptions', 'post',
+  {  object: 'page', callback_url: 'https://my-first-fb-app-doosan.herokuapp.com/facebook',
+     fields: 'conversations,feed', verify_token: 'token',
+     access_token: '1778594792353144|' + appSecret }, function(response) {console.log(response);} );
+  }
+
+
+  function getPermissions(userid) {
+    console.log(userid + " getting permissions...");
+    FB.api('/' + userid + '/permissions', function(response) {
+      console.log(response.data);
+    });
+  }
+
+  // fetching all pages that the user manages
+  function getPages() {
+    console.log('Getting All Pages you manage.... ');
+    FB.api('/me/accounts', function(response) {
+      console.log(response.data);
+      for (i = 0; i < response.data.length; i++) {
+        pageRaw = response.data[i];
+        FB.api('/' + pageRaw["id"] + '/subscribed_apps', 'post', { access_token: pageRaw["access_token"] },
+               function(response) { console.log(response); });
+        pages[i] = new PageInfo(pageRaw["access_token"], pageRaw["id"], pageRaw["name"]);
+        console.log(pages[i]);
+      }
+      var htmlString=
+        '<table style="width:100%"><tr><th style="width:70%">Page Name</th><th style="width:30%">Manage</th></tr>';
+      for (i = 0; i < pages.length; i++) {
+          htmlString += ('<tr><td>' + pages[i]["pageName"] + '</td>');
+          htmlString += ('<td><button style="width:100%" id=' + pages[i]["pageId"] + '>Manage Pages</button></td></tr>');
+      }
+      htmlString += '</table>';
+      document.getElementById('pages').innerHTML = htmlString;
+      console.log(htmlString);
+      for (j = 0; j < pages.length; j++) {
+        var btn = document.getElementById(pages[j]["pageId"].toString());
+        btn.onclick = function(pageId, pageName, accessToken) 
+	{ generatePageStatus(pageId, pageName);
+	  generatePostingWindow(pageId, pageName, accessToken);
+          getFeedPosts(pageId, accessToken);
+          getDelayedFeedPosts(pageId, accessToken)}.
+                              bind(this, pages[j]["pageId"], pages[j]["pageName"], pages[j]["accessToken"]);
+      }
+      
+    });
+  }
+
+  function generatePageStatus(pageId, pageName) {
+      pageStatusHtml = 'Managing <a target="_blank" href="https://www.facebook.com/' + pageId + '"><b>' + pageName + '</b></a>'; 
+      document.getElementById('pageStatus').innerHTML = pageStatusHtml;
+  }
+  function generatePostingWindow(pageId, pageName, accessToken) {
+    postingWindowHtml= '<table style="width:100%"><tr><th>Post for ' + pageName + '</th><th></th></tr><tr><td style="width:70%"><textarea style="width:90%" rows="1" id=post_textBox></textarea></td>';
+    postingWindowHtml+='<td style="width:30%"><button id=post_button style="width:100%">Post</button></td></tr>';
+    postingWindowHtml+='<tr><td><textarea style="width:90%" rows="1" id=delayedPost_textBox></textarea></td>';
+    postingWindowHtml+='<td><button id=delayedPost_button style="width:100%">Delayed Post</button></td></tr></table>';
+    document.getElementById('postWindow').innerHTML = postingWindowHtml;
+    var postButton = document.getElementById('post_button');
+    postButton.addEventListener
+      ("click", function(pageId, accessToken){postTimeline(pageId, accessToken)}.bind(this, pageId, accessToken)); 
+    var delayedPostButton = document.getElementById('delayedPost_button');
+    delayedPostButton.addEventListener
+      ("click", function(pageId, accessToken){delayedPostTimeline(pageId, accessToken)}.bind(this, pageId, accessToken)); 
+
+  }
+
+  function postListing(pageid, token, response) {
+    listHtml = '<p>Published Posts:</p><table style="width:100%"><tr><th style="width:50%">Post Text</th><th style="width:10%">Count</th><th style="width=25%">Updated Time</th><th style="width:15%">Delete</th></tr>';
+    for (i = 0; i < response.data.length; i++) {
+      postid = response.data[i]["id"];
+      listHtml += ('<tr><td><a target="_blank" href="https://www.facebook.com/' 
+                    + response.data[i]["id"] + '">' + response.data[i]["message"] + '</a></td><td>' +
+                    '<div id="viewers_' + postid + '"/> </td><td>' + 
+                    response.data[i]["updated_time"] + '</td><td>' +
+                    '<button style="width:100%" id="delete_' + postid + '">Delete</button></td></tr>' );
+
+    }
+    listHtml += "</table>";
+    console.log(listHtml);
+    document.getElementById('feeds').innerHTML = listHtml;
+    for (j = 0; j < response.data.length; j++) {
+      postid = response.data[j]["id"];
+      FB.api('/' + postid + '/insights/post_engaged_users', 
+             { "access_token": token, "period": "lifetime" }, function(postid, response){ 
+               populatePostInfo(postid, response); }.bind(this, postid) );
+      deleteBtn = document.getElementById('delete_' + postid);
+      deleteBtn.addEventListener
+        ("click", function(pageid, postid, token) { deletePost(pageid, postid, token); }.bind(this, pageid, postid, token));
+
+    }
+  }
+
+  function deletePost(pageid, postid, token) {
+    FB.api('/' + postid, "DELETE", { access_token: token }, function(pageid, token, response) {getFeedPosts(pageid, token); getDelayedFeedPosts(pageid, token); }.bind(this, pageid, token) );
+    
+  }
+
+  function populatePostInfo(postid, response) {
+    document.getElementById('viewers_' + postid).innerHTML = 
+      response.data[0].values[0].value;
+  }
+
+  function getFeedPosts(pageid, token) {
+    FB.api('/' + pageid + '/promotable_posts', 'get',
+           { fields: "id,message,is_published,updated_time",  is_published: "true", access_token: token }, function(pageid, token, response) { console.log(response); postListing(pageid, token, response) }.bind(this, pageid, token));
+  }
+
+  function delayedPostListing(pageid, token, response) {
+    listHtml = '<p>Unpublished Posts:</p><table style="width:100%"><tr><th style="width:50%">Post Text</th><th style="width:10%"></th><th style="width:25%">Updated Time</th><th style="width:15%">Delete</th></tr>';
+    for (i = 0; i < response.data.length; i++) {
+      postid = response.data[i]["id"];
+      listHtml += ('<tr><td><a target="_blank" href="https://www.facebook.com/' + postid + '">' + response.data[i]["message"] + '</a></td><td>' +
+                    '</td><td>' + 
+                   response.data[i]["updated_time"] + '</td><td>' +
+                   '<button style="width:100%" id="delete_' + postid + '">Delete</button></td></tr>' );
+    }
+    listHtml += "</table>";
+    console.log(listHtml);
+    document.getElementById('invisibleFeeds').innerHTML = listHtml;
+    for (j = 0; j < response.data.length; j++) {
+      postid = response.data[j]["id"];
+      deleteBtn = document.getElementById('delete_' + postid);
+      deleteBtn.addEventListener
+        ("click", function(pageid, postid, token) { deletePost(pageid, postid, token); }.bind(this, pageid, postid, token));
+
+    }
+  }
+
+  function getDelayedFeedPosts(pageid, token) {
+    FB.api('/' + pageid + '/promotable_posts', 'get',
+           { fields: "id,message,is_published,updated_time",  is_published: "false", access_token: token }, function(pageid, token, response) { console.log(response); delayedPostListing(pageid, token, response) }.bind(this, pageid, token));
+  }
+
+  function postTimeline(pageid, token) {
+    text = document.getElementById('post_textBox').value;
+    FB.api('/' + pageid + '/feed', 'post',
+    { message: text, access_token: token }, function(pageid, token) { getFeedPosts(pageid, token); getDelayedFeedPosts(pageid, token) }.bind(this, pageid, token));
+    
+  }
+
+  function delayedPostTimeline(pageid, token) {
+    text = document.getElementById('delayedPost_textBox').value;
+    FB.api('/' + pageid + '/feed', 'post',
+    { published: "false", message: text, access_token: token }, function(pageid, token) { getFeedPosts(pageid, token); getDelayedFeedPosts(pageid, token) }.bind(this, pageid, token));
+    
+  }
+
+</script>
+<!--
+  Below we include the Login Button social plugin. This button uses
+  the JavaScript SDK to present a graphical Login button that triggers
+  the FB.login() function when clicked.
+-->
+
+<fb:login-button scope="manage_pages,publish_pages,pages_show_list,read_insights" onlogin="checkLoginState();">
+</fb:login-button>
+
+<div class="wrap">
+<div class="floatleft">
+<div id="status"></div>
+<div id="pages"></div>
+<div id="livePage"><iframe style="width:100%" src="https://my-first-fb-app-doosan.herokuapp.com/"></iframe></div>
+</div>
+<div class="floatright">
+<div id="pageStatus"></div>
+<div id="postWindow"></div>
+<div id="feeds"></div>
+<div id="invisibleFeeds"></div>
+</div>
+</div>
+
+</body>
+</html>
