@@ -339,8 +339,11 @@ var ws = new WebSocket(host);
 ws.onmessage = function(event) {
   var jsonData = JSON.parse(event.data);
   var displayString = '';
-  console.log(jsonData);
   var valueObj = jsonData['value'];
+  if (typeof(valueObj) === 'undefined') {
+	  return;
+  }
+  console.log(jsonData);
   if (valueObj['verb'] == 'add') {
     displayString += valueObj['sender_name'] + " has a new post : " + valueObj["message"] + '.';
     document.getElementById('livePage').innerHTML = displayString;
