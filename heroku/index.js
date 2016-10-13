@@ -77,4 +77,6 @@ app.post('/instagram', function(req, res) {
   res.sendStatus(200);
 });
 
+
+app.use( function(req, res) { res.sendFile('index.html', { root: __dirname} ); });
 app.listen();
