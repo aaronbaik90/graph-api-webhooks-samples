@@ -40,6 +40,7 @@ th {
     color: white;
 }
 </style>
+<script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 <script>
@@ -296,7 +297,6 @@ th {
 <div id="status"></div>
 <div id="pages"></div>
 <div id="livePage"></div>
-<script src="/socket.io/socket.io.js"></script>
 <script>
 var socket = io();
 var spotToWrite = document.getElementById('livePage');
