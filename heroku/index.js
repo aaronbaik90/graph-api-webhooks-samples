@@ -71,7 +71,7 @@ app.post('/facebook', function(io, req, res) {
 
   // Process the Facebook updates here
   res.sendStatus(200);
-}.bind(io));
+}.bind(this, io));
 
 app.post('/instagram', function(req, res) {
   console.log('Instagram request body:');
