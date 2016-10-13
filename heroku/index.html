@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Facebook Login JavaScript Example</title>
+<title>My First Facebook App!</title>
 <meta charset="UTF-8">
 <style>
 
@@ -148,6 +148,17 @@ th {
     });
   }
 
+  function convertDate(dateString) {
+    dateObj = new Date(dateString);
+    nowObj = new Date(Date.now());
+    if (dateObj.toDateString() != nowObj.toDateString()) {
+      return dateObj.toDateString();
+    }
+    else {
+      return dateObj.toTimeString();
+    }
+  }
+	
   // fetching all pages that the user manages
   function getPages() {
     console.log('Getting All Pages you manage.... ');
@@ -208,7 +219,7 @@ th {
       listHtml += ('<tr><td><a target="_blank" href="https://www.facebook.com/' 
                     + response.data[i]["id"] + '">' + response.data[i]["message"] + '</a></td><td>' +
                     '<div id="viewers_' + postid + '"/> </td><td>' + 
-                    response.data[i]["updated_time"] + '</td><td>' +
+                    convertDate(response.data[i]["updated_time"]) + '</td><td>' +
                     '<button style="width:100%" id="delete_' + postid + '">Delete</button></td></tr>' );
 
     }
@@ -248,7 +259,7 @@ th {
       postid = response.data[i]["id"];
       listHtml += ('<tr><td><a target="_blank" href="https://www.facebook.com/' + postid + '">' + response.data[i]["message"] + '</a></td><td>' +
                     '</td><td>' + 
-                   response.data[i]["updated_time"] + '</td><td>' +
+                   convertDate(response.data[i]["updated_time"]) + '</td><td>' +
                    '<button style="width:100%" id="delete_' + postid + '">Delete</button></td></tr>' );
     }
     listHtml += "</table>";
