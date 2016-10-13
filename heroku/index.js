@@ -26,12 +26,8 @@ io.on('connection', function (socket) {
 app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET }));
 app.use(bodyParser.json());
 
-app.get('/', function(req, res) {
+app.get('/app', function(req, res) {
   res.sendfile('index.html', {root: __dirname});
-});
-
-app.get('/socket.io/socket.io.js', function(req, res) {
-  res.sendfile('/socket.io/socket.io.js', {root: __dirname});
 });
 
 app.get(['/facebook', '/instagram'], function(req, res) {
