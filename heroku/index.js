@@ -25,7 +25,7 @@ io.on('connection', function (socket) {
 app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET }));
 app.use(bodyParser.json());
 
-app.get('/', function(req, res) { res.sendFile('index.html'); });
+app.get('/', function(req, res) { res.sendFile('index.html', { root: __dirname} ); });
 
 app.get(['/facebook', '/instagram'], function(req, res) {
   if (
