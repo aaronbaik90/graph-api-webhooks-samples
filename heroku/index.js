@@ -22,7 +22,7 @@ var wss = new WebSocketServer({server: server});
 
 wss.on("connection", function(application, ws) {
   console.log("Web Socket Connected");
-application.post('/facebook', function(req, res) {
+application.post('/facebook', function(websocket, req, res) {
   console.log('Facebook request body:');
   console.log(req.body);
   var entry = req.body.entry;
@@ -38,7 +38,7 @@ application.post('/facebook', function(req, res) {
   }
   // Process the Facebook updates here
   res.sendStatus(200);
-});  
+}.bind(this, ws));  
   ws.on("close", function() {
     console.log("Web Socket Closed");
   });
