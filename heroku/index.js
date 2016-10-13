@@ -8,6 +8,7 @@
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
+app.use('/', express.static(__dirname + '/'));
 var xhub = require('express-x-hub');
 var socketIO = require('socket.io');
 app.set('port', (process.env.PORT || 5000));
