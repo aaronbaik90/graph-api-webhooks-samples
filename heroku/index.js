@@ -11,8 +11,10 @@ var express = require('express');
 var app = express();
 var xhub = require('express-x-hub');
 var socketIO = require('socket.io');
+var path = require('path');
+const INDEX = path.join(__dirname, 'index.html');
 app.set('port', (process.env.PORT || 5000));
-app.use(function(req, res) { res.sendFile('/index.html'); });
+app.use(function(req, res) { res.sendFile(INDEX); });
 app.listen(app.get('port'));
 
 var server = require('http').Server(app);
