@@ -23,7 +23,8 @@ io.on('connection', function (socket) {
 
 app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET }));
 app.use(bodyParser.json());
-app.use(express.static('/'));
+
+app.get('/socket.io/socket.io.js', function (req, res) { res.sendFile('socket.io/socket.io.js'), { root: __dirname} ); } );
 
 app.get('/', function(req, res) { res.sendFile('index.html', { root: __dirname} ); });
 
