@@ -51,6 +51,7 @@ app.post('/facebook', function(req, res) {
     // res.sendStatus(401);
   } */
   var entry = req.entry;
+  console.log(entry);
   for (i = 0; i < entry.length; i++) {
     for (j = 0; j < entry[i].changes.length; j++) {
       var change = entry[i].changes[j];
