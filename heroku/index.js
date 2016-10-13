@@ -22,7 +22,7 @@ var wss = new WebSocketServer({server: server});
 
 wss.on("connection", function(application, ws) {
   console.log("Web Socket Connected");
-  var id = setInterval(function() { ws.send ('{ heartbeat: message }'); }, 1000);
+  var id = setInterval(function() {ws.send(JSON.stringify(new Date()), function() {  })}, 1000);
 application.post('/facebook', function(websocket, req, res) {
   console.log('Facebook request body:');
   console.log(req.body);
