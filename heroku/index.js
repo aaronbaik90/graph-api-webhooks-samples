@@ -50,7 +50,12 @@ app.post('/facebook', function(req, res) {
     // recommend sending 401 status in production for non-validated signatures
     // res.sendStatus(401);
   } */
-  console.log(req.body);
+  console.log(req.id);
+  var changesLength = req.changes.length;
+  for (i = 0; i < changesLength; i++) {
+    console.log(req.changes[i]);
+  }
+  
 
   // Process the Facebook updates here
   res.sendStatus(200);
