@@ -296,6 +296,14 @@ th {
 <div id="status"></div>
 <div id="pages"></div>
 <div id="livePage"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+var socket = io();
+var spotToWrite = document.getElementById('livePage');
+socket.on('update_feed', function(response) {
+	spotToWrite.innerHTML = response;
+});
+</script>
 </div>
 <div class="floatright">
 <div id="pageStatus"></div>
