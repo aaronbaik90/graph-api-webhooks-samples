@@ -148,15 +148,41 @@ th {
     });
   }
 
+  // if number is 1 digit, pad 0 in front
+  function formatNumber(num) {
+    returnString = '';
+    if (num < 10) {
+      returnString += '0';
+      returnString += num;
+      return returnString;
+    }
+    else {
+      returnString += num;
+      return returnString;
+    }
+  }
+  
+  // if the date is today -> show the timestamp
+  // if the date is not today -> show the date in mm/dd/yyyy
   function convertDate(dateString) {
     dateObj = new Date(dateString);
     nowObj = new Date(Date.now());
+    returnString = '';
     if (dateObj.toDateString() != nowObj.toDateString()) {
-      return dateObj.toDateString();
+      returnString += formatNumber(dateObj.getMonth());
+      returnString += '-'
+      returnString += formatNumber(dateObj.getDate());
+      returnString += '-'
+      returnString += dateObj.getFullYear();
     }
     else {
-      return dateObj.toTimeString();
+      returnString += formatNumber(dateObj.getHours());
+      returnString += ':';
+      returnString += formatNumber(dateObj.getMinutes());
+      returnString += ':';
+      returnString += formatNumber(dateObj.getSeconds());
     }
+    return returnString;
   }
 	
   // fetching all pages that the user manages
