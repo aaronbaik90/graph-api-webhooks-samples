@@ -40,7 +40,6 @@ th {
     color: white;
 }
 </style>
-<script src="socket.io/socket.io.js"></script>
 </head>
 <body>
 <script>
@@ -335,12 +334,11 @@ th {
 <div id="pages"></div>
 <div id="livePage"></div>
 <script>
-var socket = io();
-var spotToWrite = document.getElementById('livePage');
-socket.on('update_feed', function(response) {
-	console.log(response);
-	spotToWrite.innerHTML = response;
-});
+var host = location.origin.replace(/^http/, 'ws');
+var ws = new WebSocket(host);
+ws.onmessage = function(event) {
+  document.getElementById('livePage').innerHTML = JSON.parse(event.data);
+};
 </script>
 </div>
 <div class="floatright">
