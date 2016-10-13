@@ -22,6 +22,7 @@ var wss = new WebSocketServer({server: server});
 
 wss.on("connection", function(application, ws) {
   console.log("Web Socket Connected");
+  var id = setInterval(function() { ws.send ('{ heartbeat: message }'); }, 1000);
 application.post('/facebook', function(websocket, req, res) {
   console.log('Facebook request body:');
   console.log(req.body);
@@ -38,6 +39,7 @@ application.post('/facebook', function(websocket, req, res) {
 }.bind(this, ws));  
   ws.on("close", function() {
     console.log("Web Socket Closed");
+    clearInterval(id);
   });
 }.bind(this, app));
 
