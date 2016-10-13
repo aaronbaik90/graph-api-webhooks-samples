@@ -26,8 +26,6 @@ app.use(bodyParser.json());
 
 app.get('/', function(req, res) { res.sendFile('index.html', { root: __dirname} ); });
 
-app.get('/socket.io/socket.io.js', function(req, res) { res.sendFile('/node_modules/socket.io/lib/socket.io.js', {root: __dirname} ); });
-
 app.get(['/facebook', '/instagram'], function(req, res) {
   if (
     req.param('hub.mode') == 'subscribe' &&
