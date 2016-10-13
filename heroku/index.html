@@ -341,8 +341,8 @@ ws.onmessage = function(event) {
   var displayString = '';
   console.log(jsonData);
   var valueObj = jsonData['value'];
-  if (jsonData['verb'] == 'add') {
-    displayString += jsonData['sender_name'] + " has a new post : " + jsonData["message"] + '.';
+  if (valueObj['verb'] == 'add') {
+    displayString += valueObj['sender_name'] + " has a new post : " + valueObj["message"] + '.';
     document.getElementById('livePage').innerHTML = displayString;
   }
 };
