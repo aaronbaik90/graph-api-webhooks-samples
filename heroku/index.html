@@ -237,7 +237,7 @@ th {
     var delayedPostButton = document.getElementById('delayedPost_button');
     delayedPostButton.addEventListener
       ("click", function(pageId, accessToken){delayedPostTimeline(pageId, accessToken)}.bind(this, pageId, accessToken)); 
-    var scheduledPostButton = document.getElementById('scehduled_button');
+    var scheduledPostButton = document.getElementById('scheduled_button');
     scheduledPostButton.addEventListener
       ("click", function(pageId, accessToken){scheduledPostTimeline(pageId, accessToken)}.bind(this, pageId, accessToken));
   }
@@ -246,7 +246,7 @@ th {
     text = document.getElementById('scheduledPost_textBox').value;
     postTime = document.getElementById('scheduledTime_textBox').value;
     FB.api('/' + pageid + '/feed', 'post',
-    { published: "false", message: text, access_token: token }, function(pageid, token) { getFeedPosts(pageid, token); getDelayedFeedPosts(pageid, token) }.bind(this, pageid, token));
+    { published: "false", scheduled_publish_time: postTime, message: text, access_token: token }, function(pageid, token) { getFeedPosts(pageid, token); getDelayedFeedPosts(pageid, token) }.bind(this, pageid, token));
     
   }  
 
