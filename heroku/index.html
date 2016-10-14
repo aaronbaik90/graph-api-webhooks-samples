@@ -224,10 +224,10 @@ th {
   }
   function generatePostingWindow(pageId, pageName, accessToken) {
     postingWindowHtml= '<table style="width:100%"><tr><th>Post for ' + pageName + '</th><th></th><th></th></tr><tr><td style="width:70%"><textarea style="width:90%" rows="1" id=post_textBox></textarea></td>';
-    postingWindowHtml+='<td style="width:30%"><button id=post_button style="width:100%">Post</button></td></tr>';
+    postingWindowHtml+='<td style="width:10%"></td><td style="width:20%"><button id=post_button style="width:100%">Post</button></td></tr>';
     postingWindowHtml+='<tr><td><textarea style="width:90%" rows="1" id=delayedPost_textBox></textarea></td>';
     postingWindowHtml+='<td></td><td><button id=delayedPost_button style="width:100%">Delayed Post</button></td></tr></table>';
-    postingWindowHtml+='<tr><td><textarea style="width:90%" rows="1" id=scheduledPost_textBox></textarea></td>';
+    postingWindowHtml+='<tr><td style="width"70%"><textarea style="width:90%" rows="1" id=scheduledPost_textBox></textarea></td>';
     postingWindowHtml+='<td><textarea style="width:90%" rows="1" id=scheduledTime_textBox></textarea></td>'
     postingWindowHtml+='<td><button id=scheduled_button style="width:100%">Scheduled Post</button></td></tr></table>';
     document.getElementById('postWindow').innerHTML = postingWindowHtml;
