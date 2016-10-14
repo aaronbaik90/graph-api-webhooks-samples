@@ -249,7 +249,7 @@ th {
 	  postTimestamp = postTimeObj.getTime();
 	  postTimestamp = postTimestamp/1000;
     FB.api('/' + pageid + '/feed', 'post',
-    { published: "false", scheduled_publish_time: postTimestamp, message: text, access_token: token }, function(pageid, token) { getFeedPosts(pageid, token); getDelayedFeedPosts(pageid, token) }.bind(this, pageid, token));
+    { published: "false", scheduled_publish_time: postTimestamp, message: text, access_token: token }, function(pageid, token, response) { console.log(response); getFeedPosts(pageid, token); getDelayedFeedPosts(pageid, token) }.bind(this, pageid, token));
     
   }  
 
